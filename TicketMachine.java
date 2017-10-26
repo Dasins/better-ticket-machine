@@ -101,15 +101,26 @@ public class TicketMachine
     }
     
     /**
-     * Get total and balance from the machine. 
-     * Return all the money collected.
+     * If the machine isn't in use, 
+     * empty it and return the total collection.
+     * If machine is in use. 
+     * Print an advertisement on the screen.
      */
     public int emptyMachine()
     {
+        int status;
+        status = 0;
+        if (balance == 0){
             int amountToCollect;
-            amountToCollect = total + balance;
+            amountToCollect = total;
+            status = amountToCollect;
             total = 0;
-            balance = 0;
-            return amountToCollect;
+        }
+        else {
+            status = -1;
+            System.out.println("Hay una operación en curso.");
+            System.out.println("Por favor, inténtelo más tarde.");
+        }
+        return status;
     }
 }
