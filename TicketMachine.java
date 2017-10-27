@@ -19,13 +19,20 @@ public class TicketMachine
     private int total;
     //  Determine if the machine is a prize machine. true = Prize Machine.
     private boolean prizeMachine;
+    // Sets the maximum number of tickets that can be sold
+    private int maxTicketsToSell;
+    // The total of tickets sold.
+    private int ticketsSold;
 
     /**
      * Create a machine that issues tickets of the given price.
      */
-    public TicketMachine(int cost, boolean setMachineType)
+    public TicketMachine(int cost, boolean trueForPrizeMachineFalseToNormal, int ticketsToSell)
     {
-        prizeMachine = setMachineType;
+        prizeMachine = trueForPrizeMachineFalseToNormal; //True = Prize Machine.
+        maxTicketsToSell = ticketsToSell;
+        
+        
         price = cost;
         balance = 0;
         total = 0;
@@ -51,10 +58,17 @@ public class TicketMachine
     /**
      * Receive an amount of money from a customer.
      * Check that the amount is sensible.
+     * If stock it's out, don't receive an amount and print advertisement on screen.
+     * 
+     * This method has an issue. When you insert a lot of money you can stay buying tickets  
      */
     public void insertMoney(int amount)
     {
-        if(amount > 0) {
+        if (ticketsSold >= maxTicketsToSell){ 
+            System.out.println("Stock out.");
+            System.out.println("Please go to the next nearest machine to continue your operation.");    
+        }
+        else if(amount > 0) {
             balance = balance + amount;
         }
         else {
@@ -69,7 +83,7 @@ public class TicketMachine
      * an error message if more money is required.
      */
     public void printTicket()
-    {
+    {  
         if(balance >= price) {
             //check if the machine has prizes.
             if (prizeMachine == true) {
@@ -80,7 +94,7 @@ public class TicketMachine
                 System.out.println("# " + price + " cents.");
                 System.out.println("##################");
                 System.out.println();
-                
+                    
                 // Simulate the printing of a free ticket.
                 System.out.println("##################");
                 System.out.println("# The BlueJ Line");
@@ -89,11 +103,13 @@ public class TicketMachine
                 System.out.println("# You won a free ticket");
                 System.out.println("##################");
                 System.out.println();
-    
+        
                 // Update the total collected with the price.
                 total = total + price;
                 // Reduce the balance by the prince.
                 balance = balance - price;
+                // Add 1 to the total of Tickets sold.
+                ticketsSold += 1;
             }
             else{
                 // Simulate the printing of a ticket.
@@ -103,16 +119,18 @@ public class TicketMachine
                 System.out.println("# " + price + " cents.");
                 System.out.println("##################");
                 System.out.println();
-                
+                    
                 // Update the total collected with the price.
                 total = total + price;
                 // Reduce the balance by the prince.
                 balance = balance - price;
+                // Add 1 to the total of Tickets sold. 
+                ticketsSold += 1;
             }
         }
         else {
             System.out.println("You must insert at least: " +
-                               (price - balance) + " more cents.");          
+                              (price - balance) + " more cents.");          
         }
     }
 
